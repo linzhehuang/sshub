@@ -1,0 +1,9 @@
+{
+  "string":"Hello world",
+  "number":10,
+  "array":[10,20,30],
+  "object":{
+    "object_string":"Welcome",
+    "object_number":20
+  }
+}

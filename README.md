@@ -9,3 +9,5 @@ I like to write useful and interesting scripts. But some scripts have been lost 
 - loading_demo.sh (A loading effect demo.)
 - msgbox.sh (Some interesting code inside.)
 - urlcnv.sh (Encode or decode the Thunder/FlashGet/QQCyclone url.)
+- show_all_path.sh (Print the path enviroment variables.)
+- shell_JSON (Parse JSON using shell script.)
