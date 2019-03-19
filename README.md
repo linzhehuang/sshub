@@ -12,3 +12,4 @@ I like to write useful and interesting scripts. But some scripts have been lost 
 - show_all_path.sh (Print the path enviroment variables.)
 - [shell_JSON](https://github.com/linzhehuang/sshub/tree/master/shell_JSON) (Parse JSON using shell script.)
 - [bmp-shell](https://github.com/linzhehuang/sshub/tree/master/bmp-shell) (Draw bit-map image on character terminal.)
+- [droidclean](https://github.com/linzhehuang/sshub/tree/master/droidclean)(A shell tool for cleaning up rubbish on android phone.)
