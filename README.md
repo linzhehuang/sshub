@@ -10,4 +10,5 @@ I like to write useful and interesting scripts. But some scripts have been lost 
 - msgbox.sh (Some interesting code inside.)
 - urlcnv.sh (Encode or decode the Thunder/FlashGet/QQCyclone url.)
 - show_all_path.sh (Print the path enviroment variables.)
-- shell_JSON (Parse JSON using shell script.)
+- [shell_JSON](https://github.com/linzhehuang/sshub/tree/master/shell_JSON) (Parse JSON using shell script.)
+- [bmp-shell](https://github.com/linzhehuang/sshub/tree/master/bmp-shell) (Draw bit-map image on character terminal.)
