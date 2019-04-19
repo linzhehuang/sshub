@@ -1,3 +1,4 @@
+# d2h(decimal)
 d2h() {
   local d_num=${1} h_num= r_num=
   local nums="123456789abcdef"
@@ -18,32 +19,7 @@ d2h() {
   echo $h_num
 }
 
-encrypt_field() {
-  local src i ret t
-  ret=""
-  src=${1}
-  for i in `seq 0 2 $(( ${#1} - 1 ))`; do
-    t=$(( 16#${src:${i}:2} ^ 16#${md5:${i}:2} ))
-    t=`d2h t`
-    t=`left_fill_zero ${t} 2`
-    ret=${ret}"\x"${t}
-  done
-  output=${output}${ret}
-}
-
-decrypt_field() {
-  local dsr i ret t
-  ret=""
-  dst=${1}
-  for i in `seq 0 2 $(( ${#1} - 1 ))`; do
-    t=$(( 16#${dst:${i}:2} ^ 16#${md5:${i}:2} ))
-    t=`d2h t`
-    t=`left_fill_zero ${t} 2`
-    ret=${ret}"\x"${t}
-  done
-  output=${output}${ret}
-}
-
+# left_fill_zero(src, length)
 left_fill_zero() {
   local l i ret
   ret=${1}
@@ -54,7 +30,28 @@ left_fill_zero() {
   echo -n ${ret}
 }
 
-str_split () {
+# operator(src, md5)
+operator() {
+  local ret i t
+  ret=""
+  for i in `seq 0 2 $(( ${#1} - 1 ))`; do
+    t=$(( 16#${1:${i}:2} ^ 16#${2:${i}:2} ))
+    t=`d2h t`
+    t=`left_fill_zero ${t} 2`
+    ret=${ret}"\x"${t}
+  done
+  echo -n ${ret}
+}
+
+# get_md5(password)
+get_md5() {
+  local ret
+  ret=`echo -n ${1}|md5sum`
+  echo -n ${ret%  -*}
+}
+
+# str_for_each(str, split, callback)
+str_for_each () {
 	local cur left
 	left=${1}
 	while true; do
@@ -67,34 +64,33 @@ str_split () {
 	done
 }
 
+# read_file(file, split, bytes)
 read_file() {
-  hexdump -e '16/1 "%02x" "|"' ${1}
+  local ret
+  ret=`hexdump -v -e ${3}'/1 "%02x" "'${2}'"' ${1}`
+  ret=${ret:0:$(( ${#ret} - 1))}
+  echo -n ${ret}
 }
 
-encrypt() {
-  local input
-  input=`read_file ${1}`
-  str_split "${input}" "|" encrypt_field
-  echo -ne "${output}" > ${2}
+# write_file(data, file)
+write_file() {
+  echo -ne ${1} > ${2}
 }
 
-decrypt() {
-  local input
-  input=`read_file ${1}`
-  str_split "${input}" "|" decrypt_field
-  echo -ne "${output}" > ${2}
+# process_file(intput_file, output_file, password)
+process_file() {
+  local SPLIT md5 output input
+  # task(str)
+  task() {
+    output=${output}`operator ${1} ${md5}`
+  }
+  SPLIT="|"
+  md5=`get_md5 ${3}`
+  output=""
+  intput=`read_file ${1} ${SPLIT} $(( ${#md5} / 2 ))`
+
+  str_for_each ${intput} ${SPLIT} task
+  write_file ${output} ${2}
 }
 
-output=""
-
-if [ ${1} == "-d" ]; then
-  password="${4}"
-  md5=`echo -n "${password}"|md5sum`
-  md5=${md5%  -*}
-  decrypt ${2} ${3}
-else
-  password="${3}"
-  md5=`echo -n "${password}"|md5sum`
-  md5=${md5%  -*}
-  encrypt ${1} ${2}
-fi
+process_file ${1} ${2} ${3}
