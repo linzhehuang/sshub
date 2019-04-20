@@ -15,3 +15,4 @@ I like to write useful and interesting scripts. But some scripts have been lost 
 - [droidclean](https://github.com/linzhehuang/sshub/tree/master/droidclean)(A shell tool for cleaning up rubbish on android phone.)
 - str_split.sh (Split string by special string.)
 - encrypt.sh (A simple encrypt/decrypt file tool.)
+- [pwmgr](https://github.com/linzhehuang/sshub/tree/master/pwmgr) (A password manager tool.)
