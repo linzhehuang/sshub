@@ -8,7 +8,7 @@ encrypt() {
     local _format='16/1 "%02x" " "'
     local data=$( hexdump -v -e "${_format}" "${1}" )
     local data_size=${#data}
-    (( data_size -= 1 ))
+    datasize=$(( data_size - 1 ))
     echo -n "(${data:0:${data_size}})"
   }
 
@@ -29,7 +29,7 @@ encrypt() {
     for i in $( seq 0 2 $(( block_size - 1 )) ); do
       l="${block:${i}:2}"
       r="${md5:${i}:2}"
-      (( l = \0x${l} ^ \0x${r} ))
+      l=$(( 16#${l} ^ 16#${r} ))
 
       out_data="${out_data}$( printf '\\x%02x' "${l}" )"
     done
@@ -38,6 +38,3 @@ encrypt() {
   # write data to file
   echo -ne "${out_data}" > "${2}"
 }
-
-# usage: sh encrypt.sh input_file output_file password
-encrypt ${@}
