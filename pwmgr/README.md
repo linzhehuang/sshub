@@ -28,5 +28,5 @@ Usage: sh pwmgr.sh <password> <option> [...]
 
 **2019/04/23**
 
-- version 0.2.1
+- version 0.2.0
 - add batch opreate feature

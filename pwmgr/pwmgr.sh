@@ -59,7 +59,7 @@ pwmgr() {
     print_usage
     return 1
   fi
-  
+
   if [ "${2}" = "-c" ]; then
     create_datafile "${_datafile}" "${1}"
     return 0
@@ -76,13 +76,13 @@ pwmgr() {
       print_all
       ;;
     "-s" )
-      set_site "${3}" "${4}" "${5}"
+      set_account "${3}" "${4}" "${5}"
       ;;
     "-p" )
       set_password "${3}"
       ;;
     "-d" )
-      delete_site "${3}"
+      delete_account "${3}"
       ;;
     "-b" )
       . "./${3}"

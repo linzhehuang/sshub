@@ -1,5 +1,0 @@
-set_account "site" "user" "123"  # create account
-print_all                                           # print all accounts
-delete_account "site"                   # delete account
-
-# set_password "123"                     # uncomment this to change password
