@@ -9,14 +9,16 @@ readonly _datafile="data.db"
 
 # print_usage()
 print_usage() {
-  echo -e "Password Manager v0.0.1"
+  echo -e "Password Manager v0.2.1"
   echo -e ""
   echo -e "Usage: sh pwmgr.sh <password> <option> [...]"
   echo -e ""
+  echo -e "  -c                             create datafile"
   echo -e "  -a                             display all accounts"
   echo -e "  -s <site> <name> <password>    create/update account"
   echo -e "  -p <new_password>              update password"
   echo -e "  -d <site>                      delete account"
+  echo -e "  -b <batch_file>                batch operate"
   echo -e ""
 }
 
@@ -33,13 +35,13 @@ print_all() {
   echo ""
 }
 
-# set_site(site, user, password)
-set_site() {
+# set_account(site, user, password)
+set_account() {
   set_value "${1}" "${2},${3}"
 }
 
-# delete_site(site)
-delete_site() {
+# delete_account(site)
+delete_account() {
   delete_value "${1}"
 }
 
@@ -57,14 +59,16 @@ pwmgr() {
     print_usage
     return 1
   fi
-
-  if [ ! -e "${_datafile}" ]; then
-    echo -e "warning: datafile not exists"
+  
+  if [ "${2}" = "-c" ]; then
     create_datafile "${_datafile}" "${1}"
-    echo -e "create datafile success"
+    return 0
   fi
 
-
+  if [ ! -e "${_datafile}" ]; then
+    echo -e "datafile not exists" >&2
+    return 1
+  fi
 
   open_datafile "${_datafile}" "${1}"
   case "${2}" in
@@ -79,6 +83,9 @@ pwmgr() {
       ;;
     "-d" )
       delete_site "${3}"
+      ;;
+    "-b" )
+      . "./${3}"
       ;;
     * )
       print_usage
