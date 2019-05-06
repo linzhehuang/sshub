@@ -9,7 +9,7 @@ readonly _datafile="data.db"
 
 # print_usage()
 print_usage() {
-  echo -e "Password Manager v0.2.1"
+  echo -e "Password Manager v0.3.1"
   echo -e ""
   echo -e "Usage: sh pwmgr.sh <password> <option> [...]"
   echo -e ""
@@ -25,9 +25,19 @@ print_usage() {
 # print_all()
 print_all() {
   print_line() {
-    echo -ne "${1}\t\t"
-    echo -ne "${2%,*}\t\t"
-    echo -ne "${2#*,}\n"
+    echo -ne "16 ${1} ${2%,*} ${2#*,}"|awk '
+    {
+      count = split($0, spans, " ");
+      width = spans[1];
+      for (i = 2; i <= count; i++) {
+        len = length(spans[i]);
+        remain = (len > width)? 1 : width-len;
+        printf("%s", spans[i]);
+        while (remain--) printf(" ");
+      }
+      printf("\n");
+    }
+    '
   }
   echo -ne "SITE\t\tUSER\t\tPWD\n"
   echo -ne "-----------------------------------\n"
@@ -59,7 +69,7 @@ pwmgr() {
     print_usage
     return 1
   fi
-
+  
   if [ "${2}" = "-c" ]; then
     create_datafile "${_datafile}" "${1}"
     return 0
